@@ -17,20 +17,23 @@ function generatePdf($codes, $prefix)
 	$file = '003';
 
 	// Page size in millimetter - (Letter)
-	$pageWidth = 304;
-	$pageHeight = 457;
+	$pageWidth = 297;
+	$pageHeight = 420;
 
-	$giftCardWidth = 82;
-	$giftCardHeight = 40;
+	$giftCardWidth = 123;
+	$giftCardHeight = 60;
 
-	$collumns = 3;
-	$rows = 11;
+	$collumns = 2;
+	$rows = 7;
 
-	$marginPageTop = 10;
-	$marginPageLeft = 30;
+	$marginPageTop = 5;
+	$marginPageLeft = 25;
 
-	$marginTop = 0;
-	$marginLeft = 0;
+	// Image
+	$marginTop = 2;
+	$marginLeft = 5;
+	$resizeWidth = -220;
+	$resizeHeight = 0;
 
 
 	// Fonts that will be used
@@ -47,7 +50,6 @@ function generatePdf($codes, $prefix)
 
 		// First lets create the image
 		$image = imagecreatefrompng('assets/model_4/mini_giftcard_' . $value . '.png');
-		// $image = imagecreatefrompng( 'assets/model_4/giftcard_back_3.png' );
 
 		// Antialiases
 		imagealphablending($image, true);
@@ -56,8 +58,9 @@ function generatePdf($codes, $prefix)
 		// Set the colors
 		$white = imagecolorallocate($image, 255, 255, 255);
 		$lightBrown = imagecolorallocate($image, 172, 169, 168);
+		$black = imagecolorallocate($image, 0, 0 ,0);
 
-		imagettftext($image, 40, 0, 410, 235, $lightBrown, $fontOmnesBold, '' . $code);
+		imagettftext($image, 60, 0, 350, 270, $black, $fontOmnesBold, $code);
 
 		//	imagettftext( $image, 12, 0, 355, 275, $white, $fontOmnes, 'Connect to Wifi@CampingAve and use the code as uesernme and password.' );
 		//	imagettftext( $image, 11, 0, 80, 375, $lightBrown, $fontOmnes, 'Valid for 15 days after first usage on Camping Ave.' );
@@ -149,8 +152,8 @@ function generatePdf($codes, $prefix)
 
 	$pdf->AddPage();
 
-	$row = 1;
-	$collumn = 1;
+	$row = 0;
+	$collumn = 0;
 
 	$page = 1;
 	$giftCardsOnThisPage = 0;
@@ -158,13 +161,13 @@ function generatePdf($codes, $prefix)
 	$giftCardsOnThisRow = 0;
 
     // Draw vertical the cut lines
-	$giftCardWidthBleed = 1.5;
-	$giftCardHeightBleed = 1.5;
+	$giftCardWidthBleed = 1;
+	$giftCardHeightBleed = 1;
 	$pdf->SetLineWidth(0.5);
 	$pdf->SetDrawColor(0, 0, 0);
 	for ($j = 0; $j < $collumns; $j++)
 	{
-		$lineStart = $marginPageLeft + ($j * $giftCardWidth) + $giftCardWidthBleed;
+		$lineStart = $marginPageLeft + ($j * $giftCardWidth) + $giftCardWidthBleed ;
 		$pdf->Line($lineStart, 0, $lineStart, $pageHeight);
 		$lineEnd = $marginPageLeft + ($j * $giftCardWidth) + $giftCardWidth - $giftCardWidthBleed;
 		$pdf->Line($lineEnd, 0, $lineEnd, $pageHeight);
@@ -173,8 +176,8 @@ function generatePdf($codes, $prefix)
 	{
 		$lineStart = $marginPageTop + ($j * $giftCardHeight) + $giftCardHeightBleed;
 		$pdf->Line(0, $lineStart, $pageWidth, $lineStart);
-		$lineEnd = $marginPageTop + ($j * $giftCardHeight) + $giftCardHeight - $giftCardHeightBleed;
-		$pdf->Line(0, $lineEnd, $pageWidth, $lineEnd);
+		//$lineEnd = $marginPageTop + ($j * $giftCardHeight) + $giftCardHeight - $giftCardHeightBleed;
+		//$pdf->Line(0, $lineEnd, $pageWidth, $lineEnd);
 	}
 
 	for ($i = 0; $i < $count; $i++)
@@ -182,19 +185,17 @@ function generatePdf($codes, $prefix)
 
 		$imgsrc = $giftCardsOrdered[$i];
 
-		$positionY = ((($row - 1) * ($giftCardHeight + $marginTop)) + $marginPageTop);
-		$positionX = ((($collumn - 1) * ($giftCardWidth + $marginLeft)) + $marginPageLeft);
-
-		$pdf->Image($imgsrc, $positionX, $positionY, -300, 'PNG');
+		//$positionY1 = ((($row -1) * ($giftCardHeight + $marginTop)) + $marginPageTop);
+        $positionY=  $marginPageTop + ($row * $giftCardHeight) + $giftCardHeightBleed + $marginTop;
+		//$positionX1 = ((($collumn -1) * ($giftCardWidth + $marginLeft)) + $marginPageLeft);
+        $positionX = $marginPageLeft + ($collumn * $giftCardWidth) + $giftCardWidthBleed + $marginLeft ;
+		$pdf->Image($imgsrc, $positionX , $positionY, $resizeWidth, $resizeHeight, 'PNG');
 
 		$collumn++;
-		if ($collumn > $collumns)
+		if ($collumn > $collumns -1)
 		{
-			$collumn = 1;
-		}
-		if ($collumn == 1)
-		{
-			$row++;
+			$collumn = 0;
+            $row++;
 		}
 
 		$giftCardsOnThisPage++;

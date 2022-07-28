@@ -11,7 +11,12 @@ if (isset($_POST['numbervouchers']) && isset($_POST['prefixvouchers']) && isset(
 
     for( $i=1; $i<=$_POST['numbervouchers']; $i++ )
     {
-        $vouchers[$i] = strtolower(coupon::generate($_POST['lenght'], $_POST['prefixvouchers']));
+        $tmp = strtolower(coupon::generate($_POST['lenght'], $_POST['prefixvouchers']));
+        $tmp = str_replace('0',"a",$tmp);
+        $tmp = str_replace('o',"b",$tmp);
+        $tmp = str_replace('i',"c",$tmp);
+        $tmp = str_replace('l',"d",$tmp);
+        $vouchers[$i] = $tmp;
     }
 
 
