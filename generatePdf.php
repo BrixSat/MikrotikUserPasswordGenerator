@@ -224,8 +224,8 @@ function generatePdf($codes, $prefix)
 				$pdf->Line(0, $lineEnd, $pageWidth, $lineEnd);
 			}
 			$giftCardsOnThisPage = 0;
-			$row = 1;
-			$collumn = 1;
+			$row = 0;
+			$collumn = 0;
 		}
 	}
 

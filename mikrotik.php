@@ -20,5 +20,6 @@ function insertIntoRouter($vouchers)
     foreach ($vouchers as $voucher)
        {
             ssh_run('/user-manager/user add name="'. $voucher. '"  password="'. $voucher. '" otp-secret="" group=default shared-users=4 attributes=""');
+            ssh_run('/user-manager/user-profile add user="'. $voucher. '"  profile="Camping"');
        }
 }

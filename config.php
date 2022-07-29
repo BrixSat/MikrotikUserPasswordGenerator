@@ -1,6 +1,6 @@
 <?php
 
-$SSH_PASS="cesarcasio";
+$SSH_PASS="123.123.";
 
 $SSH_USER="admin";
 
