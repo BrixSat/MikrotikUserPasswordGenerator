@@ -10,7 +10,9 @@ if (isset($_POST['numbervouchers']) && isset($_POST['prefixvouchers']) && isset(
 
     $vouchers = [];
 
-    for( $i=1; $i<=$_POST['numbervouchers']; $i++ )
+    $vouchersInput=  $_POST['numbervouchers'] * 14;
+
+    for( $i=1; $i<=$vouchersInput; $i++ )
     {
         $tmp = strtolower(coupon::generate($_POST['lenght'], $_POST['prefixvouchers']));
         $tmp = str_replace('0',"a",$tmp);
@@ -54,7 +56,7 @@ else
                 <div class="row">
                     <div class="col-md-12">
                          <div id="numbervouchers-group" class="form-group">
-                            <label for="numbervouchers">Number of vouchers to generate:</label>
+                            <label for="numbervouchers">Number of pages to generate: (14 per page)</label>
                             <input type="text" class="form-control" name="numbervouchers" placeholder="1" autocomplete="off" value="<?php echo $_POST['numbervouchers'];?>">
                         </div>
                         <div id="lenght-group" class="form-group">
@@ -62,12 +64,16 @@ else
                             <input type="text" class="form-control" name="lenght" placeholder="2" autocomplete="off" value="<?php echo $_POST['lenght'];?>">
                         </div>
                         <div id="prefix-group" class="form-group">
-                            <label for="prefix">Prefix of voucher:</label>
+                            <label for="prefixvouchers">Prefix of voucher:</label>
                             <input type="text" class="form-control" name="prefixvouchers" placeholder="camping-" autocomplete="off" value="<?php echo $_POST['prefixvouchers'];?>">
                         </div>
                         <div id="prefix-group" class="form-group">
-                            <label for="prefix">Create account on mikrotik:</label>
+                            <label for="mikrotik">Create account on mikrotik:</label>
                             <input type="checkbox" name="mikrotik"value="0">
+                        </div>
+                        <div id="prefix-group" class="form-group">
+                            <label for="dryrun">Save to txt:</label>
+                            <input type="checkbox" name="dryrun" value="0">
                         </div>
                     </div>
                 </div>
