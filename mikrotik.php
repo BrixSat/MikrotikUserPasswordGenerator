@@ -15,11 +15,21 @@ function ssh_run($ssh_command)
     echo ssh2_exec($connection, $ssh_command);
 }
 
-function insertIntoRouter($vouchers)
+function insertIntoRouter($vouchers, $dryrun = false)
 {
     foreach ($vouchers as $voucher)
        {
-            ssh_run('/user-manager/user add name="'. $voucher. '"  password="'. $voucher. '" otp-secret="" group=default shared-users=4 attributes=""');
-            ssh_run('/user-manager/user-profile add user="'. $voucher. '"  profile="Camping"');
+            $cmd1 ='/user-manager/user add name="'. $voucher. '"  password="'. $voucher. '" otp-secret="" group=default shared-users=4 attributes=""';
+            $cmd2 ='/user-manager/user-profile add user="'. $voucher. '"  profile="Camping"';
+            if ($dryrun == false )
+            {
+                ssh_run($cmd1);
+                ssh_run($cmd2);
+            }
+            else
+            {
+                file_put_contents("comandos.txt", $cmd1 . PHP_EOL, FILE_APPEND | LOCK_EX);
+                file_put_contents("comandos.txt", $cmd2 . PHP_EOL, FILE_APPEND | LOCK_EX);
+            }
        }
 }

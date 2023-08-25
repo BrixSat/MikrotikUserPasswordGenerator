@@ -1,7 +1,8 @@
 <?php
 
-
-if (isset($_POST['numbervouchers']) && isset($_POST['prefixvouchers']) && isset($_POST['lenght']))
+if (isset($_POST['numbervouchers']) && isset($_POST['prefixvouchers']) && isset($_POST['lenght'])
+&& !empty($_POST['numbervouchers']) && !empty($_POST['prefixvouchers']) && !empty($_POST['lenght'])
+)
 {
     require_once __DIR__ . '/coupon.php';
     require_once __DIR__ . '/generatePdf.php';
@@ -22,10 +23,14 @@ if (isset($_POST['numbervouchers']) && isset($_POST['prefixvouchers']) && isset(
 
     if (isset($_POST['mikrotik']))
     {
-        $mikrotik = insertIntoRouter($vouchers);
+        $mikrotik = insertIntoRouter($vouchers, isset($_POST['dryrun']));
     }
 
     $pdfGenerated = generatePdf($vouchers, $_POST['prefixvouchers']);
+}
+else
+{
+    $error="Empty values submited";
 }
 ?>
 <!doctype html>
@@ -77,6 +82,7 @@ if (isset($_POST['numbervouchers']) && isset($_POST['prefixvouchers']) && isset(
                     <div class="col-md-12">
                         <div id="prefix-group" class="form-group">
                         <?php
+                        echo $error;
                         if(isset($pdfGenerated))
                         {
                         ?>
